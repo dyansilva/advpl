@@ -79,7 +79,7 @@ LinkcNomeTransp := ALLTRIM(ALLTRIM(POSICIONE("SA4",1,xFilial("SA4")+SC5->C5_TRAN
 	IF ( lRet)
 		U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.T.,.T.)
 	else			
-			cTo:="administrativo@citopharmaindustrial.com.br"
+			cTo:=""
 			cSubject := "Informar Link de Ratreio - " + cNomeTransp + "NF: "+SF2->F2_DOC
 			U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.F.,.T.)
 	ENDIF

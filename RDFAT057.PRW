@@ -102,7 +102,7 @@ cConteudo:= STRUCT_SCREEN()
 IF ( lRet)
 	U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.F.,.F.)
 else
-	cTo:="suporteti@citopharmaindustrial.com.br"
+	cTo:=""
 	cSubject := "RASTREAMENTO TRANSPORTADORA - CITOPHARMA "
 	U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.F.,.F.)
 ENDIF

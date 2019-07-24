@@ -174,7 +174,7 @@
         cConteudo+="                    por meio do protocolo de renovação ou
         cConteudo+="                    documento atualizado. Para maiores
         cConteudo+="                   informações entrar em contato pelo fone (31)
-        cConteudo+="                    3115-6120 ou e-mail '<a moz-do-not-send='true'>'garantia@citopharmaindustrial.com.br'</a>'</td>"
+        cConteudo+="                    3115-6120 ou e-mail '<a moz-do-not-send='true'>'email'</a>'</td>"
         cConteudo+="                </tr>"
         cConteudo+="                <tr>"
         cConteudo+="                  <td class='titulo' width='40%'>Documento</td>"
