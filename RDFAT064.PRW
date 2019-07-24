@@ -22,7 +22,7 @@
     PRIVATE cTo := "" 
     PRIVATE cCC := ""
     PRIVATE cCC2 := ""
-    PRIVATE cSubject := "Atualização de documento"
+    PRIVATE cSubject := "Atualização de Documento"
     PRIVATE cConteudo := ""
     PRIVATE lRet := .T.
 
@@ -32,7 +32,6 @@
     cQuery += " AND SZD010.ZD_FILIAL = '" + xFilial("SZD")+"'"
     cQuery += " AND SZD010.ZD_VENCTO <= " + DTOS(DATE())
     cQuery += " AND SZD010.ZD_ZPXDATA <= " + DTOS(DATE())
-    cQuery += " AND SZD010.ZD_COD = '0004'"//código para os testes. 
     cQuery += " AND SZD010.ZD_DTPROT = ''"
     CQUERY += " ORDER BY ZD_COD"
 
@@ -140,7 +139,7 @@
         cConteudo+="            <table class='grade' width='100%' cellspacing='0' cellpadding='0' border='0'>"
         cConteudo+="              <tbody>"
         cConteudo+="                <tr>"
-        cConteudo+="                  <td class='cabecalho1' width='70%'>AVISO DE VENCIMENTO DE DOCUMENTAÇÃO</td>"
+        cConteudo+="                  <td class='cabecalho1' width='70%'>AVISO DE VENCIMENTO DO DOCUMENTO</td>"
         cConteudo+="                </tr>"
         cConteudo+="                <tr>"
         cConteudo+="                  <td class='cabecalho2' width='50%'>" +SZD_TEMP->ZD_NOM + "</td>"

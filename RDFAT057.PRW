@@ -42,7 +42,7 @@ elseif(Empty(alltrim(MV_PAR02)))
 	RETURN .F.
 
 ENDIF
-alert("Passou")
+
 DBGOTOP()
 While !EOF()
 	Email(RDFAT057->C5_NUM)
