@@ -16,7 +16,7 @@
     USER Function RDFAT064()
 
     LOCAL cQuery := ""
-    PRIVATE cServer := ""
+    PRIVATE cServer := "email-ssl.com.br"
     PRIVATE cAccount := "" 
     PRIVATE cPassword := ""
     PRIVATE cTo := "" 
@@ -147,11 +147,11 @@
         cConteudo+="                <tr>"
          dbselectArea("SZD_TEMP")
     IF SZD_TEMP->ZD_ZCLIFOR == 'C'
-	    cConteudo +=" <td class='cabecalho2' width='20%'>C.N.P.J.c:" +ALLTRIM(transform(POSICIONE("SA1",1,xFilial("SA1")+SZD_TEMP->ZD_CLIFOR+ SZD_TEMP->ZD_LOJA,"SA1->A1_CGC"),"@R 99.999.999/9999-99")) + "</td>"  
+	    cConteudo +=" <td class='cabecalho2' width='20%'>C.N.P.J.:" +ALLTRIM(transform(POSICIONE("SA1",1,xFilial("SA1")+SZD_TEMP->ZD_CLIFOR+ SZD_TEMP->ZD_LOJA,"SA1->A1_CGC"),"@R 99.999.999/9999-99")) + "</td>"  
     ELSEIF SZD_TEMP->ZD_ZCLIFOR == 'F'
-	    cConteudo +=" <td class='cabecalho2' width='20%'>C.N.P.J.f:" +alltrim(transform(POSICIONE("SA2",1,xFilial("SA2")+SZD_TEMP->ZD_ZFORNEC+ SZD_TEMP->ZD_ZLOJAF,"SA2->A2_CGC"),"@R 99.999.999/9999-99")) +"</td>"
+	    cConteudo +=" <td class='cabecalho2' width='20%'>C.N.P.J.:" +alltrim(transform(POSICIONE("SA2",1,xFilial("SA2")+SZD_TEMP->ZD_ZFORNEC+ SZD_TEMP->ZD_ZLOJAF,"SA2->A2_CGC"),"@R 99.999.999/9999-99")) +"</td>"
     ELSEIF SZD_TEMP->ZD_ZCLIFOR == 'T' 
-        cConteudo +=" <td class='cabecalho2' width='20%'>C.N.P.J.t:" +alltrim(transform(POSICIONE("SA4",1,xFilial("SA4")+SZD_TEMP->ZD_ZTRANSP,"SA4->A4_CGC"),"@R 99.999.999/9999-99")) +"</td>"
+        cConteudo +=" <td class='cabecalho2' width='20%'>C.N.P.J.:" +alltrim(transform(POSICIONE("SA4",1,xFilial("SA4")+SZD_TEMP->ZD_ZTRANSP,"SA4->A4_CGC"),"@R 99.999.999/9999-99")) +"</td>"
     ENDIF
         cConteudo+="                </tr>"
         cConteudo+="              </tbody>"
@@ -168,13 +168,12 @@
         cConteudo+="              cellpadding='0' border='0'>"
         cConteudo+="              <tbody>"
         cConteudo+="                <tr>"
-        cConteudo+="                  <td class='mensagem' colspan='3' width='100%'>Identificamos
+        cConteudo+="                  <td class='mensagem' colspan='3' width='100%'>Identificamos"
         cConteudo+="                    em nosso cadastro, documentos a vencer nos
-        cConteudo+="                    próximos dias. Aguardamos a atualização
-        cConteudo+="                    por meio do protocolo de renovação ou
-        cConteudo+="                    documento atualizado. Para maiores
-        cConteudo+="                   informações entrar em contato pelo fone (31)
-        cConteudo+="                    3115-6120 ou e-mail '<a moz-do-not-send='true'>'email'</a>'</td>"
+        cConteudo+="                    próximos dias. Gentileza enviar o documento
+        cConteudo+="                    atualizado ou protocolo de renovação
+        cConteudo+="                    para o e-mail '<a moz-do-not-send='true'>'@citophaindustrial.com.br'</a>'
+        cConteudo+="                    para maiores informações entrar em contato por esse mesmo e-mail ou fone (31) 3115-6120. </td>"
         cConteudo+="                </tr>"
         cConteudo+="                <tr>"
         cConteudo+="                  <td class='titulo' width='40%'>Documento</td>"
