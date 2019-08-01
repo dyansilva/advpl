@@ -59,33 +59,3 @@ dbUseArea(.t., "TOPCONN", tcgenqry(,,cQuery1),cAliTMPs, .f.,)
 dbCloseArea()
 	
 RETURN lRet
-
-
-
-
-
-
-
-
-
-
-
-// dbSelectArea(cAliTMPs)
-// dbGoTop()
-// 	While !EOF()
-// 	alert("while")
-// 		cDocs += ALLTRIM((cAliTMPs)->ZD_ZTRANSP)
-// 		alert(cDocs)
-// 	dbskip()	
-// 	Enddo	
-// 	IF !(cDocs $'(cAliTMPs)->ZD_ZTRANSP')
-// 		alert("1")	
-// 		AVISO("NECESSÁRIO CADASTRO DE DOCUMENTOS", "Necessário cadastra documento da Transportadora", { "Voltar" },3)=1
-// 		dbSelectArea(cAliTMPs)	
-// 		dbCloseArea()
-// 		return .F.
-// 	ENDIF
-
-
-
-
