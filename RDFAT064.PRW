@@ -17,9 +17,9 @@
 
     LOCAL cQuery := ""
     PRIVATE cServer := "email-ssl.com.br"
-    PRIVATE cAccount := "" 
+    PRIVATE cAccount := "@citopharmaindustrial.com.br" 
     PRIVATE cPassword := ""
-    PRIVATE cTo := "" 
+    PRIVATE cTo := "@citopharmaindustrial.com.br" 
     PRIVATE cCC := ""
     PRIVATE cCC2 := ""
     PRIVATE cSubject := "Atualização de Documento"
@@ -33,10 +33,9 @@
     cQuery += " AND SZD010.ZD_VENCTO <= " + DTOS(DATE())
     cQuery += " AND SZD010.ZD_ZPXDATA <= " + DTOS(DATE())
     cQuery += " AND SZD010.ZD_DTPROT = ''"
-    CQUERY += " ORDER BY ZD_COD"
+    cQuery += " ORDER BY ZD_COD"
 
     dbUseArea(.T.,"TOPCONN", tcgenqry(,,cQuery), "SZD_TEMP", .F.,.T.)
-
     dbselectArea("SZD_TEMP")
     dbGoTop()
     while !EOF()
@@ -45,6 +44,13 @@
             dbSkip()
         loop
         EndIf   
+        
+        dbSelectArea("SZD_TEMP")
+        if (POSICIONE("SA1",1,xFilial("SA1")+SZD_TEMP->ZD_CLIFOR+ SZD_TEMP->ZD_LOJA,"A1_ZUCOM02") < DATE()-365)
+            dbSkip()
+            loop
+        ENDIF
+       
         bodyEmail()
         IF ( lRet)
             U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.F.,.F.)
@@ -172,7 +178,7 @@
         cConteudo+="                    em nosso cadastro, documentos a vencer nos
         cConteudo+="                    próximos dias. Gentileza enviar o documento
         cConteudo+="                    atualizado ou protocolo de renovação
-        cConteudo+="                    para o e-mail '<a moz-do-not-send='true'>'@citophaindustrial.com.br'</a>'
+        cConteudo+="                    para o e-mail '<a moz-do-not-send='true'>'@citopharmaindustrial.com.br'</a>'
         cConteudo+="                    para maiores informações entrar em contato por esse mesmo e-mail ou fone (31) 3115-6120. </td>"
         cConteudo+="                </tr>"
         cConteudo+="                <tr>"
