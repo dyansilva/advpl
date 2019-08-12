@@ -38,6 +38,8 @@ dbUseArea(.t., "TOPCONN", tcgenqry(,,cQuery1),cAliTMPs, .f.,)
 
 	IF (cAliTMP)->(EOF()).AND.(cAliTMP)->(BOF())
 		lRet:= .T.
+	dbSelectArea(cAliTMPs)
+	dbGoTop()
 	iF (cAliTMPs) -> (EOF())
 		AVISO("NECESSÁRIO CADASTRO DE DOCUMENTOS", "Não foi encontrado documento cadastrado da transportadora. " +CHR(13)+CHR(10) +"Favor cadastra. Toda transportadora devera ter no mínimo um documento cadastrado.", { "Voltar" },3)=1	
 		return .F.
