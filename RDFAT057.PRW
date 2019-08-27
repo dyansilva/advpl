@@ -2,10 +2,10 @@
 
 USER FUNCTION RDFAT057()
 Local cQuery3 := ""
-PRIVATE cServer      := ""
-PRIVATE cAccount     := "" // vereficar qual  E-mail vai ser responsavel pelo ENVIO..
+PRIVATE cServer      := "email-ssl.com.br"
+PRIVATE cAccount     := "@citopharmaindustrial.com.br" // vereficar qual  E-mail vai ser responsavel pelo ENVIO..
 PRIVATE cPassword    := ""
-PRIVATE cTo          := ""
+PRIVATE cTo          := "@citopharmaindustrial.com.br"
 PRIVATE cCC		   := ""
 PRIVATE cCC2		   := ""
 PRIVATE cConteudo	   := ""
@@ -19,6 +19,16 @@ PRIVATE cPerg  	:="RDFAT057"
 IF	Pergunte(cPerg,.T.)
 ELSE
 	MSGALERT("Cancelado Pelo Usuário")
+	RETURN .F.
+ENDIF
+/*
+Venda direta mv_par05 = 1
+Pedido de venda = 2 
+*/
+
+IF (MV_PAR05 = 2)	
+ELSE
+	U_RDFAT063()
 	RETURN .F.
 ENDIF
 
@@ -40,16 +50,23 @@ elseif(Empty(alltrim(MV_PAR02)))
 	dbSelectArea("RDFAT057")
 	DBCloseArea()
 	RETURN .F.
-
+elseif(Empty(alltrim(cValToChar(MV_PAR03))))
+	dbSelectArea("RDFAT057")
+	DBCloseArea()
+	RETURN .F.
+elseif(Empty(alltrim(cValToChar(MV_PAR04))))
+	dbSelectArea("RDFAT057")
+	DBCloseArea()
+	RETURN .F.
 ENDIF
 
 DBGOTOP()
+
 While !EOF()
 	Email(RDFAT057->C5_NUM)
 	dbSelectArea("RDFAT057")
 	DBSKIP()
 ENDDO
-
 dbSelectArea("RDFAT057")
 DBCLOSEAREA()
 return
@@ -71,15 +88,15 @@ dbSelectArea("SF2")
 dbSetorder(1)
 dbSeek(TMP_TAB2->F2_FILIAL+TMP_TAB2->F2_DOC+TMP_TAB2->F2_SERIE+TMP_TAB2->F2_CLIENTE+TMP_TAB2->F2_LOJA+TMP_TAB2->F2_FORMUL+TMP_TAB2->F2_TIPO)
 DBSELECTAREA("TMP_TAB2")
-cSubject   := "RASTREAMENTO TRANSPORTADORA - CITOPHARMA"  /*-------------*/
+cSubject := "RASTREAMENTO TRANSPORTADORA - CITOPHARMA"  /*-------------*/
 DBCLOSEAREA()
 
 	IF(POSICIONE("SA1",1,XFILIAL("SA1")+SC5->C5_CLIENTE,"A1_ZENPEDI")== 'N')
 		MSGINFO("Cliente Configurado Para Não Receber Rastreamento Por E-mail.")
 		RETURN .T. 
 	ENDIF
-
-cTo := POSICIONE("SA1",1,xFilial("SA1")+SF2->F2_CLIENTE+SF2->F2_LOJA,"A1_EMAIL")
+	
+	//cTo :="@citopharmaindustrial.com.br" //POSICIONE("SA1",1,xFilial("SA1")+SF2->F2_CLIENTE+SF2->F2_LOJA,"A1_EMAIL")
 
 IF ( Empty(cTo) )
 	MSGINFO("E-MAIL DO CLIENTE EM BRANCO")
@@ -102,7 +119,7 @@ cConteudo:= STRUCT_SCREEN()
 IF ( lRet)
 	U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.F.,.F.)
 else
-	cTo:=""
+	cTo:="@citopharmaindustrial.com.br"
 	cSubject := "RASTREAMENTO TRANSPORTADORA - CITOPHARMA "
 	U_EMAILOK(cServer, cAccount,cPassword,cTo,cCC,cSubject,cConteudo,cCC2,.F.,.F.)
 ENDIF
@@ -112,9 +129,11 @@ RETURN
 STATIC FUNCTION STRUCT_SCREEN()
 	
 LOCAL cConteudo := ""
+
 LinkcNomeTransp := ALLTRIM(POSICIONE("SA4",1,xFilial("SA4")+SC5->C5_TRANSP,"A4_ZRASTRE"))
 cNomeTransp:= ALLTRIM(POSICIONE("SA4",1,xFilial("SA4")+SC5->C5_TRANSP,"A4_NOME"))
-//Dados Do E-mail
+
+
 cConteudo :="<html>"
 cConteudo += "<head>"
 cConteudo += "<meta Charset='UTF-8'>"
@@ -186,7 +205,7 @@ cTable += "</table></center>"
 
 DBCloseArea()
 
-RETUR cTable
+RETURN cTable
 
 STATIC FUNCTION TMP_TAB()
 
@@ -224,7 +243,7 @@ Local cEndreco := SPACE(80)
 
 DEFINE MSDIALOG oDlg1 FROM 190,367 TO 290,890 PIXEL TITLE OemToAnsi("Adicionar Link Rastreio")
 TSay():New(012,005,{||OemToAnsi("Link Rastreio: ")},oDlg1,,,,,,.T.,CLR_BLUE,CLR_WHITE,050,008)
-oGet1:=TGet():New(010    ,060     ,{|u| if(PCount()>0,cEndreco:=u ,cEndreco)},oDlg1,190,010,"@!"/*"@E 99,999,999,999.99"*/,{||},CLR_BLACK,CLR_WHITE,,,,.T.,,,,,.F.,,,, "","cEndreco")
+oGet1:=TGet():New(010    ,060     ,{|u| if(PCount()>0,cEndreco:=u ,cEndreco)},oDlg1,190,010,""/*"@E 99,999,999,999.99"*/,{||},CLR_BLACK,CLR_WHITE,,,,.T.,,,,,.F.,,,, "","cEndreco")
 @ 035,020 BUTTON  oButton PROMPT "Gravar" OF oDlg1 PIXEL ACTION  oDlg1:End() .And. fGrvValor(cEndreco)
 @ 035,080 BUTTON  oButton PROMPT "Fechar"   OF oDlg1 PIXEL ACTION  oDlg1:End()
 Activate MsDialog oDlg1 Center

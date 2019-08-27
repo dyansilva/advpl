@@ -1,12 +1,11 @@
 
-/*{Protheus.doc} User Function RDFAT06()
+/*{Protheus.doc} User Function RDFAT064()
     (long_description)
     @type  RDFAT064.PRW
     @author DYANFELIPE
     @since 11/07/2019
     @version 0.01
-    @param param_name, param_type, param_descr
-    @return return_var, return_type, return_description
+    @Envia e-mail para cliente e transportadora que está com documento vencido
     @example
     (examples)
     @see (links_or_references)
