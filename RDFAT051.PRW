@@ -21,7 +21,7 @@ ENDIF
 IF(cOrigem == "MATA415")//Orçamento.
 	
 	cCodTabela:= POSICIONE("DA0",3,XFILIAL("DA0")+M->CJ_ZSEG,"DA0_CODTAB")
-	cSegmento:= POSICIONE("DA0",3,XFILIAL("DA0")+M->CJ_ZSEG,"DA0_CODTAB")
+	cSegmento:= POSICIONE("AOV",1,XFILIAL("AOV")+M->CJ_ZSEG,"AOV_DESSEG") 
 	
 	IF cTblSN=='N'
 		RETURN.T.
@@ -30,17 +30,12 @@ IF(cOrigem == "MATA415")//Orçamento.
 	DBSELECTAREA("DA1")
 	DBSETORDER(7)
 	dbSeek(xFilial("DA1")+cCodTabela+TMP1->CK_PRODUTO)
-	
-	alert(TMP1->CK_PRODUTO)
 
-	IF TMP1->CK_PRCVEN > DA1->DA1_PRCVEN .OR. TMP1->CK_PRCVEN < DA1->DA1_PRCMAX
+	IF TMP1->CK_PRCVEN < DA1->DA1_PRCVEN .OR. TMP1->CK_PRCVEN > DA1->DA1_PRCMAX
 		lRet:= .F.
-		alert("MIN: " + cValToChar(DA1->DA1_PRCVEN))
-		alert("MAX: " + cValToChar(DA1->DA1_PRCMAX))
-		MSGALERT("Valor de venda fora da Tabela de Preço"+CHR(10)+"Segmento: "+cSegmento+chr(10)+"Preço Máximo: " + Transform(DA1->DA1_PRCMAX,PesqPict("DA1","DA1_PRCMAX"))+CHR(10)+"Preço de Venda: "+Transform(DA1->DA1_PRCVEN,PesqPict("DA1","DA1_PRCVEN")))	
+		MSGALERT("Valor de venda fora da Tabela de Preço"+CHR(10)+"Segmento: "+cSegmento+chr(10)+"Preço Máximo: " + AllTrim(Transform(DA1->DA1_PRCMAX,PesqPict("DA1","DA1_PRCMAX")))+CHR(10)+"Preço de Venda: "+AllTrim(Transform(DA1->DA1_PRCVEN,PesqPict("DA1","DA1_PRCVEN"))))	
 	ENDIF
-		M->CJ_ZSEG := POSICIONE("SA1",1,XFILIAL("SA1")+M->CJ_CLIENTE+M->CJ_LOJA,"A1_CODSEG")
-		M->CJ_ZESTR := POSICIONE("SA1",1,XFILIAL("SA1")+M->CJ_CLIENTE+M->CJ_LOJA,"A1_XESTR")
+		M->CJ_ZSEG := POSICIONE("DA0",3,XFILIAL("DA0")+M->CJ_ZSEG,"DA0_SEGMTO")
 	RETURN lRet
 	
 ELSEIF(cOrigem == "MATA410")

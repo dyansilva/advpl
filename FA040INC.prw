@@ -60,18 +60,15 @@ dbSelectArea("SC5")
 dbSetorder(1)
 dbSeek(xFilial ("SC5")+M->E1_NUM)
 
-	if (M->E1_PREFIXO = "BAT" .AND. SC5->C5_CONDPAG = "BAT")
+	if (M->E1_PREFIXO = "BAT")
 
-		if (M->E1_NUM != SC5->C5_NUM .OR. M->E1_CLIENTE != SC5->C5_CLIENTE .OR. M->E1_LOJA != SC5->C5_LOJACLI)
+		if (M->E1_NUM != SC5->C5_NUM .OR. M->E1_CLIENTE != SC5->C5_CLIENTE .OR. M->E1_LOJA != SC5->C5_LOJACLI .OR. SC5->C5_CONDPAG != "BAT")
 			MsgAlert ("As informações (No. Titulo, Cliente, loja, Prefixo) tem que ser o mesmo do Pedido.")
 			Return lRet := .F.
 		elseif (Alltrim(SC5->C5_NOTA) != '')
 			MsgAlert ("Digite um pedido que ainda não foi faturado.")
 			RETURN lRet := .F.
 		ENDIF
-	else
-		Msginfo("Só pode ser adicionado pedido do tipo BAT")
-		Return .F.
 	ENDIF
 
 Return lRet
