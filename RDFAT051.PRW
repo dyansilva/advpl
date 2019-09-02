@@ -31,7 +31,7 @@ IF(cOrigem == "MATA415")//Orçamento.
 	DBSETORDER(7)
 	dbSeek(xFilial("DA1")+cCodTabela+TMP1->CK_PRODUTO)
 
-	IF TMP1->CK_PRCVEN < DA1->DA1_PRCVEN .OR. TMP1->CK_PRCVEN > DA1->DA1_PRCMAX
+	IF TMP1->CK_PRCVEN > DA1->DA1_PRCMAX
 		lRet:= .F.
 		MSGALERT("Valor de venda fora da Tabela de Preço"+CHR(10)+"Segmento: "+cSegmento+chr(10)+"Preço Máximo: " + AllTrim(Transform(DA1->DA1_PRCMAX,PesqPict("DA1","DA1_PRCMAX")))+CHR(10)+"Preço de Venda: "+AllTrim(Transform(DA1->DA1_PRCVEN,PesqPict("DA1","DA1_PRCVEN"))))	
 	ENDIF
