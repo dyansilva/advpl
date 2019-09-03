@@ -2,10 +2,11 @@
 
 User function RDCOM007()
 
-Local Cabec1 := "Código   Titulo da Tarefa                Informação                                         Responsável                            Data Inicial    Data Final"
+//Declaracao de Variaveis
+Local Cabec1 := "Código   Fornecedor                                                   Contato                        Data de Emissão    Data de Entrega"
 Local Cabec2 := ""
 Local titulo := "Compras a receber"
-Local cDesc1 := "RELATORIO DE COMPRAS QUE JÁ FORAM REALIZADA"
+Local cDesc1 := "Retório de compras QUE JÁ FORAM REALIZADA"
 Local cDesc2 := ""
 Local cDesc3 := ""
 Local cTitulo:= "Compras"
@@ -19,28 +20,34 @@ Private cString := "SC7"
 Private aReturn := { "Zebrado", 1, "Administracao", 2, 2, 1, "", 1}
 Private nTipo := 18
 Private cPerg :=""
+Private CONTFL:= 01
+Private m_pag := 01
+Private cNome := ""
 
 nTipo := If(aReturn[4]==1,15,18)
-cQuery := " SELECT SC7010.C7_NUM, SC7010.C7_FORNECE, SC7010.C7_CONTATO, SC7010.C7_EMISSAO, SC7010.C7_DATPRF, SC7010.C7_ENCER "
+
+cQuery := " SELECT DISTINCT SC7010.C7_NUM, SC7010.C7_FORNECE, SC7010.C7_CONTATO, SC7010.C7_EMISSAO, SC7010.C7_DATPRF, SC7010.C7_ENCER, SC7010.C7_LOJA "
 cQuery += " FROM SC7010"
 cQuery += " WHERE SC7010.D_E_L_E_T_ = ''"
 cQuery += " AND SC7010.C7_FILIAL = '"+xFilial("SC7")+"'"
 cQuery += " AND SC7010.C7_ENCER != 'E'"
 cQuery += " AND SC7010.C7_DATPRF < GETDATE()"
-
-DBUseArea(.T.,"TOPCONN", TCGenQry(,,cQuery),"RDCOM007",.F.,)
+cQuery += " ORDER BY SC7010.C7_FORNECE"
+dbUseArea(.t., "TOPCONN", tcgenqry(,,cQuery),"RDCOM007", .F.,.T.)
 
 IF RDCOM007->(EOF()).AND.RDCOM007->(BOF())
-    Return .T.
-else 
-    If MsgYesNo("Existe pedido de compra pendente. Deseja visualizar?")
-    else
-        Return .T.
-    EndIf
-EndIf
+	return .T.
+ELSE
+	IF MSGYESNO("Existem pedido de compra pendente. Deseja visualizar?")
+	else
+		return .T.
+	ENDIF
+ENDIF
 
-// Monta a interface padrao com o usuario...
-wnrel := SetPrint(cString,NomeProg,"",@titulo,cDesc1,cDesc2,cDesc3,.T.,aOrd,.T.,Tamanho,,.T.)
+
+wnrel := SetPrint(cString,NomeProg,"",@titulo,cDesc1,cDesc2,cDesc3,.T.,aOrd,.T.,Tamanho,,.T.)// Monta a interface padrao com o usuario...
+
+Pergunte(cPerg,.T.)//Chama a pergunta
 
 If nLastKey == 27
 	Return
@@ -53,8 +60,8 @@ If nLastKey == 27
 Endif
 
 RptStatus({|| RunReport(Cabec1,Cabec2,Titulo,nLin) },Titulo)//RPTSTATUS monta janela com a regua de processamento.
-
 Return
+
 
 Static Function RunReport(Cabec1,Cabec2,Titulo,nLin)
 
@@ -68,36 +75,31 @@ SetRegua(RecCount())//SETREGUA -> Indica quantos registros serao processados par
 
 dbGoTop()
 
-While !EOF()
 
-	If lAbortPrint
-		Pergunte(cPerg,.F.)
-		@nLin,00 PSAY "*** CANCELADO PELO OPERADOR ***"
-		Exit
-	Endif
+While !EOF()
 	
-	//Impressao do cabecalho do relatorio.
+	
+	//Impressao do cabecalho do relatório.
 	If nLin > 65 // Salto de Pagina. Neste caso o formulario tem 55 linhas...
 		Cabec(Titulo,Cabec1,Cabec2,NomeProg,Tamanho,nTipo)
 		nLin := 8
 	Endif
-	alert("n|Psay")
-		@nLin,0 PSAY "________________________________________________________________________________________________________________________________________________________________"
+
+    	@nLin,0 PSAY "________________________________________________________________________________________________________________________________________________________________"
 		@nLin,00 PSAY cValToChar(RDCOM007->C7_NUM)
-		@nLin,9 PSAY cValToChar(RDCOM007->C7_FORNECE)
-		@nLin,41 PSAY RDCOM007->C7_CONTATO
-		@nLin,91 PSAY RDCOM007->C7_EMISSAO
-		@nLin,132 PSAY  RDCOM007->C7_DATPRF
+		@nLin,9 PSAY substr(cNome,1,50) := POSICIONE("SA2",1,XFILIAL("SA2")+RDCOM007->C7_FORNECE+RDCOM007->C7_LOJA,"A2_NREDUZ")
+		@nLin,70 PSAY substr(RDCOM007->C7_CONTATO,1,15)
+		@nLin,105 PSAY DtoC(StoD(RDCOM007->C7_EMISSAO))
+		@nLin,120 PSAY DtoC(StoD(RDCOM007->C7_DATPRF))
 		nLin++
 		@nLin,0 PSAY "________________________________________________________________________________________________________________________________________________________________"
 
 	dbselectArea("RDCOM007")
 	dbSkip()
+	
 enddo
 
 SET DEVICE TO SCREEN
-
-//Se impressao em disco, chama o gerenciador de impressao...
 
 If aReturn[5]==1
 	dbCommitAll()
