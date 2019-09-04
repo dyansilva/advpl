@@ -1,9 +1,17 @@
-
+/*/{Protheus.doc} struct RDCOM007()
+	Relatório  de compras feito em pedido de compras modulo 02.
+	Só será impresso pedidos que ainda não foi dado um documento de entrada.
+	@author  Dyan filipe
+	@param   [Parameter_Name],Parameter_type,Parameter_Description
+	@return  Relatório
+	@table   SC7
+	@since   04-09-2019
+/*/
 
 User function RDCOM007()
 
 //Declaracao de Variaveis
-Local Cabec1 := "Código   Fornecedor                                                   Contato                        Data de Emissão    Data de Entrega"
+Local Cabec1 := "Código   Código Loja Fornecedor                                               Contato                Data de Emissão    Data de Entrega"
 Local Cabec2 := ""
 Local titulo := "Compras a receber"
 Local cDesc1 := "Retório de compras QUE JÁ FORAM REALIZADA"
@@ -32,13 +40,13 @@ cQuery += " WHERE SC7010.D_E_L_E_T_ = ''"
 cQuery += " AND SC7010.C7_FILIAL = '"+xFilial("SC7")+"'"
 cQuery += " AND SC7010.C7_ENCER != 'E'"
 cQuery += " AND SC7010.C7_DATPRF < GETDATE()"
-cQuery += " ORDER BY SC7010.C7_FORNECE"
+cQuery += " ORDER BY SC7010.C7_DATPRF DESC, SC7010.C7_FORNECE"
 dbUseArea(.t., "TOPCONN", tcgenqry(,,cQuery),"RDCOM007", .F.,.T.)
 
 IF RDCOM007->(EOF()).AND.RDCOM007->(BOF())
 	return .T.
 ELSE
-	IF MSGYESNO("Existem pedido de compra pendente. Deseja visualizar?")
+	IF MSGYESNO("Existem pedido de compra pendente. Deseja visualizá-los?")
 	else
 		return .T.
 	ENDIF
@@ -77,7 +85,7 @@ dbGoTop()
 
 
 While !EOF()
-	
+	cNome := POSICIONE("SA2",1,XFILIAL("SA2")+RDCOM007->C7_FORNECE+RDCOM007->C7_LOJA,"A2_NREDUZ")
 	
 	//Impressao do cabecalho do relatório.
 	If nLin > 65 // Salto de Pagina. Neste caso o formulario tem 55 linhas...
@@ -87,8 +95,8 @@ While !EOF()
 
     	@nLin,0 PSAY "________________________________________________________________________________________________________________________________________________________________"
 		@nLin,00 PSAY cValToChar(RDCOM007->C7_NUM)
-		@nLin,9 PSAY substr(cNome,1,50) := POSICIONE("SA2",1,XFILIAL("SA2")+RDCOM007->C7_FORNECE+RDCOM007->C7_LOJA,"A2_NREDUZ")
-		@nLin,70 PSAY substr(RDCOM007->C7_CONTATO,1,15)
+		@nLin,9 PSAY RDCOM007->C7_FORNECE+" - "+RDCOM007->C7_LOJA+" - "+ substr(cNome,1,50)
+		@nLin,78 PSAY substr(RDCOM007->C7_CONTATO,1,15)
 		@nLin,105 PSAY DtoC(StoD(RDCOM007->C7_EMISSAO))
 		@nLin,120 PSAY DtoC(StoD(RDCOM007->C7_DATPRF))
 		nLin++
