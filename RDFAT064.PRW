@@ -18,12 +18,13 @@
     PRIVATE cServer := "email-ssl.com.br"
     PRIVATE cAccount := "@citopharmaindustrial.com.br" 
     PRIVATE cPassword := ""
-    PRIVATE cTo := "@citopharmaindustrial.com.br" 
+    PRIVATE cTo := "" 
     PRIVATE cCC := ""
     PRIVATE cCC2 := ""
     PRIVATE cSubject := "Atualização de Documento"
     PRIVATE cConteudo := ""
     PRIVATE lRet := .T.
+    PRIVATE cClieItv := "" 
 
     cQuery := " SELECT SZD010.ZD_COD, SZD010.ZD_CLIFOR, SZD010.ZD_ZFORNEC, SZD010.ZD_ZTRANSP, ZD_NOM, SZD010.ZD_CODDOC, SZD010.ZD_NOMDOC,SZD010.ZD_VENCTO, SZD010.ZD_CONTATO, SZD010.ZD_EMAIL,SZD010.ZD_ZCLIFOR,SZD010.ZD_DTPROT,SZD010.ZD_ZPERENV,SZD010.ZD_ZDATAEV, SZD010.ZD_ZPXDATA,SZD010.ZD_LOJA,SZD010.ZD_ZLOJAF"
     cQuery += " FROM SZD010"
@@ -38,10 +39,11 @@
     dbselectArea("SZD_TEMP")
     dbGoTop()
     while !EOF()
-        //cTo:=""
-        IF(Empty(cTo))
+        cClienItv := POSICIONE("SA1",1,xFilial("SA1")+SZD_TEMP->ZD_CLIFOR+ SZD_TEMP->ZD_LOJA,"A1_ZUCOM02")
+        cTo := alltrim(SZD_TEMP->ZD_EMAIL)
+        IF(Empty(cTo) .OR. Empty(cClienItv))
             dbSkip()
-        loop
+            loop
         EndIf   
         
         dbSelectArea("SZD_TEMP")
@@ -177,7 +179,7 @@
         cConteudo+="                    em nosso cadastro, documentos a vencer nos
         cConteudo+="                    próximos dias. Gentileza enviar o documento
         cConteudo+="                    atualizado ou protocolo de renovação
-        cConteudo+="                    para o e-mail '<a moz-do-not-send='true'>'@citopharmaindustrial.com.br'</a>'
+        cConteudo+="                    para o e-mail '<a moz-do-not-send='true'>'administrativo03@citopharmaindustrial.com.br'</a>'
         cConteudo+="                    para maiores informações entrar em contato por esse mesmo e-mail ou fone (31) 3115-6120. </td>"
         cConteudo+="                </tr>"
         cConteudo+="                <tr>"
