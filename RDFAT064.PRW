@@ -30,7 +30,7 @@
     cQuery += " FROM SZD010"
     cQuery += " WHERE SZD010.D_E_L_E_T_ <> '*'"
     cQuery += " AND SZD010.ZD_FILIAL = '" + xFilial("SZD")+"'"
-    cQuery += " AND SZD010.ZD_VENCTO <= " + DTOS(DATE())
+    cQuery += " AND SZD010.ZD_VENCTO - SZD010.ZD_ALERT <= " + DTOS(DATE())
     cQuery += " AND SZD010.ZD_ZPXDATA <= " + DTOS(DATE())
     cQuery += " AND SZD010.ZD_DTPROT = ''"
     cQuery += " ORDER BY ZD_COD"
